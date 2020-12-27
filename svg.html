@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" >
+    <meta http-equiv="X-UA-Compotible" content="ie=edge">
+    <title>Donut chart</title>
+    <style>
+        .title{text-align:center;}
+        .graphic{width:300px;height:200px;margin:0 auto;border:1px solid #ebebeb}
+        .chart circle{transition: stroke-width .3s;}
+        .chart circle:hover{stroke-width:40px;}
+    </style>
+</head>
+<body>
+    <h1 class="title">Donut Chart</h1>
+    <div class="graphic">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <g class="chart" transform="rotate(-90)" style="transform-origin:90px 100px">
+                <circle cx="90" cy="100" r="50" fill="none" stroke="#ffd24d" stroke-width="35" stroke-dasharray="125.6, 314"></circle>
+                <circle cx="90" cy="100" r="50" fill="none" stroke="#77a0d4" stroke-width="35" stroke-dasharray="87.92, 314" stroke-dashoffset="-125.6"></circle>
+                <circle cx="90" cy="100" r="50" fill="none" stroke="#e29cad" stroke-width="35" stroke-dasharray="62.8, 314" stroke-dashoffset="-213.52"></circle>
+                <circle cx="90" cy="100" r="50" fill="none" stroke="#d8c7aa" stroke-width="35" stroke-dasharray="37.68, 314" stroke-dashoffset="-276.32"></circle>
+            </g>
+            <g class="category" transform="translate(210, 62)">
+                <g transform="translate(0,0)">
+                    <rect width="9" height="9" x="0" y="1" rx="2" ry="2" fill="#ffd24d"></rect>
+                    <text x="18" y="11" font-size="14">React</text>
+                </g>
+                <g transform="translate(0,21)">
+                    <rect width="9" height="9" x="0" y="1" rx="2" ry="2" fill="#77a0d4"></rect>
+                    <text x="18" y="11" font-size="14">Angular</text>
+                </g>
+                <g transform="translate(0,42)">
+                    <rect width="9" height="9" x="0" y="1" rx="2" ry="2" fill="#e29cad"></rect>
+                    <text x="18" y="11" font-size="14">Vue.js</text>
+                </g>
+                <g transform="translate(0,63)">
+                    <rect width="9" height="9" x="0" y="1" rx="2" ry="2" fill="#d8c7aa"></rect>
+                    <text x="18" y="11" font-size="14">Etc</text>
+                </g>
+            </g>
+        </svg>
+    </div>
+<script>
+    const circles = [...document.querySelectorAll('circle')];
+    const arcs = [125.6, 87.92, 62.8, 37.68];
+    let startTime;
+    function step(timestamp){
+        if(startTime === undefined){
+            startTime = timestamp;
+        } 
+        const diffTime = timestamp - startTime;
+        const progress = diffTime / 800;
+        arcs.forEach((value, index) => {
+            circles[index].setAttribute('stroke-dasharray', `${value * inExpo(progress)}, 314`);
+        });
+        if(progress < 1){
+            window.requestAnimationFrame(step);
+        }
+    }
+    window.requestAnimationFrame(step);
+    function inExpo(n){
+        return 0 === n ? 0 : Math.pow(1024, n-1);
+    }
+</script>
+</body>
+</html>
